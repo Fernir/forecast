@@ -1,0 +1,100 @@
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  color: #4F6228;
+  font-size: 12px;
+  text-align: center;
+
+  @include mobile {
+    table-layout: fixed;
+  }
+
+  &-nopad {
+    padding: 0 !important;
+  }
+
+  &-up {
+    &:before {
+      content: '>';
+      display: inline-block;
+      transform: rotateZ(90deg) scaleX(.6);
+      transform-origin: 60% 60%;
+      transition: transform .2s ease;
+      margin-right: 5px;
+    }
+  }
+
+  &-down {
+    &:before {
+      content: '>';
+      display: inline-block;
+      transform: rotateZ(-90deg) scaleX(.6);
+      transform-origin: 50% 50%;
+      transition: transform .2s ease;
+      margin-right: 5px;
+    }
+  }
+
+  & th {
+    background: #9BBB59;
+    padding: 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: solid darken(#B3CC82, 20%) 1px;
+
+    &:first-child {
+      cursor: default;
+    }
+
+    &:not(:first-child) {
+      cursor: pointer;
+      transition: background-color .2s ease;
+
+      &:hover {
+        background: darken(#9BBB59, 5%);
+        color: darken(#4F6228, 10%);
+      }
+
+      &:active {
+        background: darken(#9BBB59, 10%);
+        color: darken(#4F6228, 20%);
+      }
+    }
+  }
+
+  & tr {
+    background: #E6EED5;
+    border: solid #B3CC82 1px;
+
+    &:nth-child(2n) {
+      background: #fff;
+    }
+  }
+
+  & td {
+    padding: 10px;
+    border: solid #B3CC82 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: default;
+  }
+}
+
+.chart {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.3);
+
+  &-container {
+    padding: 15px 20px 0 20px;
+    background: #ffffff;
+    box-shadow: 0 0 2px rgba(0,0,0,.2);
+    position: relative;
+  }
+}

@@ -1,0 +1,44 @@
+.input {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+  padding: 0 10px;
+  border: none;
+  text-align: center;
+
+  &-holder {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  &-button {
+    background: #9BBB59;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    font: normal 15px verdana;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: background-color .2s ease;
+    border: none;
+
+    &--small {
+      padding: 0 5px;
+      line-height: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background: darken(#9BBB59, 5%);
+      color: darken(#4F6228, 10%);
+    }
+
+    &:active {
+      background: darken(#9BBB59, 10%);
+      color: darken(#4F6228, 20%);
+    }
+  }
+
+}
