@@ -1,5 +1,6 @@
 import webpack from 'webpack';
 import v1 from 'uuid/v1';
+import compression from 'compression';
 import fs from 'fs';
 import {parse, stringify} from 'csv';
 import React from 'react';
@@ -12,6 +13,8 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 import configuration from './webpack.config';
+
+const dataFile = './data/forecast.csv';
 
 const devServerOptions = {
   quiet: true,
@@ -28,8 +31,6 @@ const devServerOptions = {
   historyApiFallback: true
 };
 
-console.log('Starting webpack dev-server');
-
 const curHash = v1();
 const app = express();
 const compiler = webpack(configuration);
@@ -38,6 +39,7 @@ const renderPage = (req, res) => {
   const body = renderToString(
     <html lang="ru">
       <head>
+        <title>Forecast</title>
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=0"/>
         <link rel="stylesheet" href={`/js/styles.css?${curHash}`}/>
       </head>
@@ -54,16 +56,34 @@ const renderPage = (req, res) => {
 };
 
 app
+  .use(compression())
   .use(WebpackDevMiddleware(compiler, devServerOptions))
   .use(WebpackHotMiddleware(compiler))
   .use(bodyParser.json())
+  .use(bodyParser.raw())
+  .use(bodyParser.urlencoded())
   .use(cors({credentials: true, origin: true}))
   .use(netjet())
-  .use(express.static(path.join(__dirname, 'public')));
+  .use(express.static(path.join(__dirname, 'public'), {maxAge: '120d'}));
 
+
+app.post('/api/import/', (req, res) => {
+  const data = req.body.data;
+  parse(data, (err, parsed) => {
+    if (parsed.length && parsed[0].length) {
+      fs.writeFileSync(dataFile, data, {encoding: 'utf8', flag: 'w'});
+    }
+  });
+  res.send({});
+});
+
+app.get('/api/export/', (req, res) => {
+  res.setHeader('Content-Type', 'text/csv');
+  res.download(dataFile);
+});
 
 app.get('/api/read/', (req, res) => {
-  const data = fs.readFileSync('./data/forecast.csv');
+  const data = fs.readFileSync(dataFile);
   parse(data, (err, parsed) => {
     res.status(200).send(parsed);
   });
@@ -73,10 +93,10 @@ app.post('/api/save/', (req, res) => {
   const data = req.body.data;
   if (data) {
     stringify(data, (err, out) => {
-      fs.writeFileSync('./data/forecast.csv', out, {encoding: 'utf8', flag: 'w'});
+      fs.writeFileSync(dataFile, out, {encoding: 'utf8', flag: 'w'});
     });
   }
-  res.send({status: 'success'});
+  res.send({});
 });
 
 app.get('*', renderPage);
@@ -89,6 +109,6 @@ app.listen(
       throw error;
     }
 
-    console.log('[webpack-dev-server] Running on localhost:3000');
+    console.log('Running on localhost:3000');
   }
 );

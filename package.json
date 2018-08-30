@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production webpack --mode production --progress --colors",
-    "dev": "set NODE_ENV=development && babel-node ./webpack-dev-server.js"
+    "dev": "babel-node ./webpack-dev-server.js"
   },
   "author": "Nikolay Alekseev",
   "license": "ISC",

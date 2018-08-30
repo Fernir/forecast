@@ -1,6 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {observer} from 'mobx-react';
-import {LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend} from 'recharts';
+import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from 'recharts';
+import axios from 'axios';
+
 import {CloseButton} from './../../components/close';
 import {titles} from '../../global/titles';
 
@@ -17,6 +19,14 @@ export class Table extends Component {
 
   chart = (index) => this.setState({chart: index || null});
 
+  save = () => {
+    const {forecastData: {data} = {}} = this.props;
+
+    axios.post('/api/save/', {
+      data
+    });
+  };
+
   render() {
     const {forecastData: {data} = {}} = this.props;
 
@@ -30,7 +40,7 @@ export class Table extends Component {
 
     return (
       <Fragment>
-        <table className="tbl" ref={(node) => {this.table = node;}}>
+        <table className="tbl" ref={(node) => { this.table = node; }}>
           <tbody>
             <tr>
               {titles.map((title, index) => (
@@ -55,7 +65,7 @@ export class Table extends Component {
                   </td>
                 ))}
                 <td style={{width: '1%', padding: 5}}>
-                  <button className="input-button input-button--small" onClick={() => { data.splice(trIndex, 1); }}>&times;</button>
+                  <button className="input-button input-button--small" onClick={() => { data.splice(trIndex, 1); this.save(); }}>&times;</button>
                 </td>
               </tr>
             ))}

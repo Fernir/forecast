@@ -11,6 +11,8 @@ class BigData {
       }
     });
   }
+
+  update = () => this.constructor();
 }
 
 const forecastData = new BigData();

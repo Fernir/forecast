@@ -1,4 +1,5 @@
 import React, {Fragment, PureComponent} from 'react';
+import axios from 'axios';
 import {titles} from '../../global/titles';
 import {formatDate} from '../../global/dateFormat';
 
@@ -13,9 +14,14 @@ export class Edit extends PureComponent {
     const {forecastData: {data} = {}} = this.props;
 
     data.push(this.inputs.map((input) => input.value));
-    if (callback) {
-      callback();
-    }
+
+    axios.post('/api/save/', {
+      data
+    }).then(() => {
+      if (callback) {
+        callback();
+      }
+    });
   };
 
   inputs = [];
