@@ -1,1 +1,1 @@
-<a href="localhost:3000">тык</a>
+В браузере http://localhost:3000
