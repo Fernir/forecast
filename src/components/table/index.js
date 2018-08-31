@@ -1,42 +1,19 @@
 import React, {Component, Fragment} from 'react';
-import {observer} from 'mobx-react';
-import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from 'recharts';
-import axios from 'axios';
-
-import {CloseButton} from './../../components/close';
-import {titles} from '../../global/titles';
+import {titles} from '../../common';
+import Chart from './../chart';
 
 
 import './table.scss';
 
-@observer
-export class Table extends Component {
+export default class Table extends Component {
   state = {
     chart: false
   };
 
-  getCellValue = (cell) => (cell.match(/\//) ? (new Date(cell)).getTime() : parseFloat(cell));
-
   chart = (index) => this.setState({chart: index || null});
 
-  save = () => {
-    const {forecastData: {data} = {}} = this.props;
-
-    axios.post('/api/save/', {
-      data
-    });
-  };
-
   render() {
-    const {forecastData: {data} = {}} = this.props;
-
-    const toGraph = data.slice().map((row) => {
-      const newRow = {};
-      titles.forEach((title, index) => {
-        Object.assign(newRow, {[`${title}`]: title === 'Дата' ? row[index].replace(/\//gi, '.') : this.getCellValue(row[index])});
-      });
-      return newRow;
-    });
+    const {data} = this.props;
 
     return (
       <Fragment>
@@ -65,32 +42,18 @@ export class Table extends Component {
                   </td>
                 ))}
                 <td style={{width: '1%', padding: 5}}>
-                  <button className="input-button input-button--small" onClick={() => { data.splice(trIndex, 1); this.save(); }}>&times;</button>
+                  <button className="input-button input-button--small" onClick={() => this.props.onDeleteRow(trIndex)}>&times;</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {this.state.chart && (
-          <div className="chart" onClick={() => this.setState({chart: null})}>
-            <div className="chart-container" onClick={(e) => e.stopPropagation()}>
-              <CloseButton onClick={() => this.setState({chart: null})}>&times;</CloseButton>
-              <LineChart
-                animationDuration={0}
-                width={this.table ? this.table.offsetWidth - 46 : 500}
-                height={300}
-                data={toGraph}
-              >
-                <Legend verticalAlign="top" height={36}/>
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
-                <XAxis dataKey="Дата"/>
-                <YAxis/>
-                <Line type="linear" dot={false} dataKey={titles[this.state.chart]} stroke="#00aad8"/>
-                <Tooltip/>
-              </LineChart>
-            </div>
-          </div>
-        )}
+        <Chart
+          tableElement={this.table}
+          data={data}
+          chart={this.state.chart}
+          onClose={() => this.setState({chart: null})}
+        />
       </Fragment>
     );
   }

@@ -33,6 +33,9 @@ const devServerOptions = {
 
 const curHash = v1();
 const app = express();
+
+configuration.mode = 'development';
+
 const compiler = webpack(configuration);
 
 const renderPage = (req, res) => {

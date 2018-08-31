@@ -4,12 +4,18 @@ import {CloseButton} from './../../components/close';
 
 import './menu.scss';
 
-export class LeftMenu extends PureComponent {
+export class Menu extends PureComponent {
   state = {
     open: false
   };
 
-  closeMenu = () => this.setState({open: false});
+  componentDidMount() {
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === 27) {
+        this.closeMenu();
+      }
+    });
+  }
 
   onChange = (val) => {
     this.closeMenu();
@@ -17,6 +23,19 @@ export class LeftMenu extends PureComponent {
       this.props.onChange(val);
     }
   };
+
+  openMenu = () => this.setState({open: true});
+  closeMenu = () => this.setState({open: false});
+
+  handleMenuClick = (items, index) => {
+    if (items[index].onClick) {
+      items[index].onClick();
+      return;
+    }
+    this.onChange(index);
+  };
+
+  isItemExists = (items, selected) => (items[selected] && items[selected].component);
 
   render() {
     const {items, selected} = this.props;
@@ -26,26 +45,20 @@ export class LeftMenu extends PureComponent {
       <Fragment>
         <div className={cn('menu-back', {'menu-back--open': open})} onClick={this.closeMenu}>
           <div className={cn('menu', {'menu--open': open})}>
-            <CloseButton onClick={this.closeMenu}>&times;</CloseButton>
+            <CloseButton onClick={this.closeMenu}/>
             {items.map((item, index) => (
               <div
                 className="menu-item"
                 key={item.title}
-                onClick={() => {
-                  if (items[index].onClick) {
-                    items[index].onClick();
-                    return;
-                  }
-                  this.onChange(index);
-                }}
+                onClick={() => this.handleMenuClick(items, index)}
               >
                 {item.title}
               </div>
             ))}
           </div>
         </div>
-        <div className={cn('menu-hamburger', {'menu-hamburger--visible': !open})} onClick={() => this.setState({open: true})}>Меню</div>
-        {items[selected].component && (
+        <div className={cn('menu-hamburger', {'menu-hamburger--visible': !open})} onClick={this.openMenu}>Меню</div>
+        {this.isItemExists(items, selected) && (
           <div className="container">
             <h2 style={{textAlign: 'center'}}>{items[selected].title}</h2>
             {items[selected].component}

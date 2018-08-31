@@ -13,28 +13,6 @@
     padding: 0 !important;
   }
 
-  &-up {
-    &:before {
-      content: '>';
-      display: inline-block;
-      transform: rotateZ(90deg) scaleX(.6);
-      transform-origin: 60% 60%;
-      transition: transform .2s ease;
-      margin-right: 5px;
-    }
-  }
-
-  &-down {
-    &:before {
-      content: '>';
-      display: inline-block;
-      transform: rotateZ(-90deg) scaleX(.6);
-      transform-origin: 50% 50%;
-      transition: transform .2s ease;
-      margin-right: 5px;
-    }
-  }
-
   & th {
     background: #9BBB59;
     padding: 10px 0;
@@ -77,24 +55,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: default;
-  }
-}
-
-.chart {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,.3);
-
-  &-container {
-    padding: 15px 20px 0 20px;
-    background: #ffffff;
-    box-shadow: 0 0 2px rgba(0,0,0,.2);
-    position: relative;
   }
 }

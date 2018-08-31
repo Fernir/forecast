@@ -1,7 +1,5 @@
 import React, {Fragment, PureComponent} from 'react';
-import axios from 'axios';
-import {titles} from '../../global/titles';
-import {formatDate} from '../../global/dateFormat';
+import {formatDate, titles} from '../../common';
 
 import './edit.scss';
 
@@ -10,18 +8,12 @@ export class Edit extends PureComponent {
     e.target.value = e.target.value.replace(/[^0-9.]/g, '');
   };
 
-  save = (callback) => {
-    const {forecastData: {data} = {}} = this.props;
-
-    data.push(this.inputs.map((input) => input.value));
-
-    axios.post('/api/save/', {
-      data
-    }).then(() => {
-      if (callback) {
-        callback();
-      }
-    });
+  save = () => {
+    if (this.props.onChange) {
+      this.props.onChange(
+        this.inputs.map((input) => input.value),
+      );
+    }
   };
 
   inputs = [];
@@ -58,7 +50,7 @@ export class Edit extends PureComponent {
           </tbody>
         </table>
         <div className="input-holder">
-          <button className="input-button" onClick={() => this.save(this.props.callback)}>Сохранить</button>
+          <button className="input-button" onClick={this.save}>Сохранить</button>
         </div>
       </Fragment>
     );

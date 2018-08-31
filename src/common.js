@@ -1,10 +1,12 @@
+export const titles = ['Дата', 'Выручка', 'серебро, руб.', 'Индекс ММВБ Last'];
+
 export const formatDate = (date) => {
   let dd = date.getDate();
   let mm = date.getMonth() + 1;
   let yy = date.getFullYear() % 100;
 
   if (dd < 10) {
-    dd = `0$${dd}`;
+    dd = `0${dd}`;
   }
 
   if (mm < 10) {

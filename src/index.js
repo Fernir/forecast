@@ -1,70 +1,26 @@
-import React, {Fragment, PureComponent} from 'react';
+import React from 'react';
 import {render} from 'react-dom';
-import axios from 'axios';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import {Provider} from 'react-redux';
 
-import {forecastData} from './global/bigData';
-import {Table} from './components/table';
-import {LeftMenu} from './components/menu';
-import {Edit} from './components/edit';
+import axios from 'axios';
+import {FETCH_DATA} from './actions';
+
+import App from './containers/app';
+import {forecastReducer} from './reducers/forecastReducer';
 
 import './scss/index.scss';
 
+const store = createStore(
+  forecastReducer,
+  applyMiddleware(thunk)
+);
 
-class Main extends PureComponent {
-  state = {
-    selected: 0
-  };
+store.dispatch((
+  () => (dispatch) => axios.get('/api/read/').then(({data = {}}) => dispatch({type: FETCH_DATA, data}))
+)());
 
-  save = () => window.open('/api/export/');
-
-  open = () => {
-    const inp = document.createElement('input');
-    inp.type = 'file';
-    inp.accept = '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd';
-    inp.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file && window.FileReader) {
-        const fr = new window.FileReader();
-        fr.onload = (ev) => {
-          axios.post('/api/import/', {
-            data: ev.target.result
-          }).then(() => forecastData.update());
-        };
-        fr.readAsText(file);
-      }
-    });
-    inp.click();
-  };
-
-  render() {
-    return (
-      <Fragment>
-        <LeftMenu
-          selected={this.state.selected}
-          onChange={(val) => this.setState({selected: val})}
-          items={[
-            {
-              title: 'Таблица',
-              component: <Table forecastData={forecastData}/>
-            },
-            {
-              title: 'Ввод',
-              component: <Edit forecastData={forecastData} callback={() => this.setState({selected: 0})}/>
-            },
-            {
-              title: 'Импорт',
-              onClick: this.open
-            },
-            {
-              title: 'Экспорт',
-              onClick: this.save
-            }
-          ]}
-        />
-      </Fragment>
-    );
-  }
-}
-
-
-render(<Main/>, document.querySelector('.js-forecast'));
+render(<Provider store={store}>
+  <App/>
+</Provider>, document.querySelector('.js-forecast'));

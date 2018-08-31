@@ -17,29 +17,30 @@ const plugins = [
   }),
   new webpack.LoaderOptionsPlugin({
     options: {
+      debug: true,
       context: __dirname
     }
   }),
-  new CleanWebpackPlugin([path.join(__dirname, 'js')]),
-  new UglifyJsParallelPlugin({
-    workers: os.cpus().length,
-    mangle: true,
-    compress: {
-      warnings: false, // Suppress uglification warnings
-      sequences: true,
-      dead_code: true,
-      conditionals: true,
-      booleans: true,
-      unused: true,
-      if_return: true,
-      join_vars: true,
-      drop_console: true
-    }
-  })
+  // new CleanWebpackPlugin([path.join(__dirname, 'js')]),
+  // new UglifyJsParallelPlugin({
+  //   workers: os.cpus().length,
+  //   mangle: true,
+  //   compress: {
+  //     warnings: false, // Suppress uglification warnings
+  //     sequences: true,
+  //     dead_code: true,
+  //     conditionals: true,
+  //     booleans: true,
+  //     unused: true,
+  //     if_return: true,
+  //     join_vars: true,
+  //     drop_console: true
+  //   }
+  // })
 ];
 
 module.exports = {
-  mode: 'production',
+  devtool: 'eval-source-map',
   entry: {
     'babel-polyfill': 'babel-polyfill',
     bundle: './src/index.js'
@@ -50,6 +51,13 @@ module.exports = {
     chunkFilename: 'om-[name]-[chunkhash].js',
     publicPath: '/js/',
     jsonpFunction: 'omWebpackJsonp'
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname),
+      '~': path.resolve(__dirname),
+      components: path.join(__dirname, './src/components')
+    }
   },
   module: {
     rules: [
