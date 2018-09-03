@@ -1,12 +1,12 @@
 import React, {Fragment, PureComponent} from 'react';
 import {CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis} from 'recharts';
 
-import {CloseButton} from './../../components/close';
+import {CloseButton} from './../../components';
 import {titles} from '../../common';
 
 import './chart.scss';
 
-export default class Chart extends PureComponent {
+export class Chart extends PureComponent {
   componentDidMount() {
     document.addEventListener('keydown', (e) => {
       if (e.keyCode === 27 && this.props.onClose) {

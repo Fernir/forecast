@@ -1,6 +1,6 @@
 import React, {Fragment, PureComponent} from 'react';
 import cn from 'classnames';
-import {Hamburger} from './../../components/hamburger';
+import {Hamburger} from './../../components';
 
 import './menu.scss';
 

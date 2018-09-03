@@ -2,11 +2,9 @@ import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
-import {selectMenuItem, deleteRow, addRow, fetchData} from './../actions';
+import {addRow, deleteRow, fetchData, selectMenuItem} from './../actions';
 
-import Table from './../components/table';
-import {Menu} from './../components/menu';
-import {Edit} from './../components/edit';
+import {Edit, Menu, Table} from './../components';
 
 import './../scss/index.scss';
 
@@ -18,25 +16,34 @@ class App extends PureComponent {
   save = () => window.open('/api/export/');
 
   importFile = () => {
-    const inp = document.createElement('input');
-    inp.type = 'file';
-    inp.accept = '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd';
-    inp.addEventListener('change', (e) => {
+    if (!this.inputFile) {
+      this.inputFile = document.createElement('input');
+    }
+
+    Object.assign(this.inputFile, {
+      type: 'file',
+      accept: '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd'
+    });
+
+    this.inputFile.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file && window.FileReader) {
         const fr = new window.FileReader();
-        fr.onload = (ev) => {
-          axios.post('/api/import/', {
-            data: ev.target.result
-          }).then(() => {
-            this.props.dispatch(selectMenuItem(0));
-            this.props.dispatch(fetchData());
-          });
-        };
-        fr.readAsText(file);
+        if (fr) {
+          fr.onload = (ev) => {
+            axios.post('/api/import/', {
+              data: ev.target.result
+            }).then(() => {
+              this.props.dispatch(selectMenuItem(0));
+              this.props.dispatch(fetchData());
+            });
+          };
+          fr.readAsText(file);
+        }
       }
     });
-    inp.click();
+
+    this.inputFile.click();
   };
 
   render() {

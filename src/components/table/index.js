@@ -1,11 +1,11 @@
 import React, {Component, Fragment} from 'react';
 import {titles} from '../../common';
-import Chart from './../chart';
+import {Chart} from './../../components';
 
 
 import './table.scss';
 
-export default class Table extends Component {
+export class Table extends Component {
   state = {
     chart: false
   };

@@ -36,11 +36,12 @@ export class Edit extends PureComponent {
                     ref={(node) => this.inputs.push(node)}
                     className="input"
                     type="text"
-                    {...(index === 0 && ({
-                      value: formatDate(new Date()),
+                    {...(index === 0 ? ({
+                      defaultValue: formatDate(new Date()),
                       readOnly: true
+                    }) : ({
+                      defaultValue: 0
                     }))}
-                    defaultValue={0}
                     onChange={this.onChange}
                     name={index}
                   />
