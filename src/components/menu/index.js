@@ -45,7 +45,10 @@ export class Menu extends PureComponent {
     return (
       <Fragment>
         <div className={cn('menu-back', {'menu-back--open': open})} onClick={this.closeMenu}/>
-        <Hamburger onClick={open ? this.closeMenu : this.openMenu} open={open}/>
+        <Hamburger
+          onClick={open ? this.closeMenu : this.openMenu}
+          open={open}
+        />
         <div className={cn('menu', {'menu--open': open})}>
           {items.map((item, index) => (
             <div
