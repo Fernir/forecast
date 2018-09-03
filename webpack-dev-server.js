@@ -73,7 +73,7 @@ app
 app.post('/api/import/', (req, res) => {
   const data = req.body.data;
   parse(data, (err, parsed) => {
-    if (parsed.length && parsed[0].length) {
+    if (parsed && parsed.length && parsed[0].length) {
       fs.writeFileSync(dataFile, data, {encoding: 'utf8', flag: 'w'});
     }
   });

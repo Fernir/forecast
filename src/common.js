@@ -17,5 +17,5 @@ export const formatDate = (date) => {
     yy = `0${yy}`;
   }
 
-  return `${yy}/${mm}/${dd}`;
+  return `${dd}.${mm}.${yy}`;
 };

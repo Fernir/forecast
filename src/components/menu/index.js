@@ -1,6 +1,6 @@
 import React, {Fragment, PureComponent} from 'react';
 import cn from 'classnames';
-import {CloseButton} from './../../components/close';
+import {Hamburger} from './../../components/hamburger';
 
 import './menu.scss';
 
@@ -30,6 +30,7 @@ export class Menu extends PureComponent {
   handleMenuClick = (items, index) => {
     if (items[index].onClick) {
       items[index].onClick();
+      this.closeMenu();
       return;
     }
     this.onChange(index);
@@ -43,24 +44,29 @@ export class Menu extends PureComponent {
 
     return (
       <Fragment>
-        <div className={cn('menu-back', {'menu-back--open': open})} onClick={this.closeMenu}>
-          <div className={cn('menu', {'menu--open': open})}>
-            <CloseButton onClick={this.closeMenu}/>
-            {items.map((item, index) => (
-              <div
-                className="menu-item"
-                key={item.title}
-                onClick={() => this.handleMenuClick(items, index)}
-              >
-                {item.title}
-              </div>
-            ))}
-          </div>
+        <div className={cn('menu-back', {'menu-back--open': open})} onClick={this.closeMenu}/>
+        <Hamburger onClick={open ? this.closeMenu : this.openMenu} open={open}/>
+        <div className={cn('menu', {'menu--open': open})}>
+          {items.map((item, index) => (
+            <div
+              className="menu-item"
+              key={`menu-item-${index}`}
+              onClick={() => this.handleMenuClick(items, index)}
+              {...(item.title.icon && ({title: item.title.label}))}
+            >
+              {item.title.icon || item.title}
+            </div>
+          ))}
         </div>
-        <div className={cn('menu-hamburger', {'menu-hamburger--visible': !open})} onClick={this.openMenu}>Меню</div>
         {this.isItemExists(items, selected) && (
           <div className="container">
-            <h2 style={{textAlign: 'center'}}>{items[selected].title}</h2>
+            {typeof items[selected].title === 'string' ? (
+              <h2 style={{textAlign: 'center'}}>{items[selected].title}</h2>
+            ) : (
+              <Fragment>
+                <h2 style={{textAlign: 'center'}}>{items[selected].title.label}</h2>
+              </Fragment>
+            )}
             {items[selected].component}
           </div>
         )}

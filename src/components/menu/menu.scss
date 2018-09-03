@@ -13,11 +13,12 @@
   left: 0;
   top: 0;
   bottom: 0;
-  max-width: 0;
   background: #ffffff;
+  max-width: 0;
   transition: max-width .2s ease;
   overflow: hidden;
   padding-top: 50px;
+  z-index: 1;
 
   &-back {
     position: fixed;
@@ -41,33 +42,13 @@
   }
 
   &-item {
-    padding: 20px 30px;
+    padding: 5px 10px;
     cursor: pointer;
+    transition: background-color .2s ease;
+    min-width: 50px;
 
     &:hover {
       background: darken(#ffffff, 20%);
-    }
-  }
-
-  &-hamburger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: #fff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    cursor: pointer;
-    opacity: 0;
-    transition: all .3s ease;
-    pointer-events: none;
-    visibility: hidden;
-
-    &--visible {
-      opacity: 1;
-      pointer-events: all;
-      visibility: visible;
     }
   }
 }
