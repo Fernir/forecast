@@ -9,7 +9,7 @@ import {Edit, Menu, Table} from './../components';
 import './../scss/index.scss';
 
 class App extends PureComponent {
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(fetchData());
   }
 
