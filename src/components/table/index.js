@@ -1,19 +1,19 @@
-import React, {Component, Fragment} from 'react';
+import React, {Fragment, PureComponent} from 'react';
+import {connect} from 'react-redux';
 import {titles} from '../../common';
 import {Chart} from './../../components';
 
+import {chartOpen, deleteRow, fetchData} from './../../actions';
 
 import './table.scss';
 
-export class Table extends Component {
-  state = {
-    chart: false
-  };
-
-  chart = (index) => this.setState({chart: index || null});
+class Table extends PureComponent {
+  componentWillMount() {
+    this.props.dispatch(fetchData());
+  }
 
   render() {
-    const {data} = this.props;
+    const {data = []} = this.props;
 
     return (
       <Fragment>
@@ -23,7 +23,7 @@ export class Table extends Component {
               {titles.map((title, index) => (
                 <th
                   key={title}
-                  onClick={() => this.chart(index)}
+                  onClick={() => this.props.dispatch(chartOpen(index))}
                   {...(index === titles.length - 1 && ({colSpan: 2}))}
                 >
                   {title}
@@ -31,30 +31,24 @@ export class Table extends Component {
               ))}
             </tr>
             {data.map((tr, trIndex) => (
-              <tr
-                key={`tr-${trIndex}`}
-              >
+              <tr key={`tr-${trIndex + 1}`}>
                 {tr.map((td) => (
-                  <td
-                    key={td}
-                  >
+                  <td key={td}>
                     {td}
                   </td>
                 ))}
                 <td style={{width: '1%', padding: 5}}>
-                  <button className="input-button input-button--small" onClick={() => this.props.onDeleteRow(trIndex)}>&times;</button>
+                  <button className="input-button input-button--small"
+                          onClick={() => this.props.dispatch(deleteRow(trIndex))}>&times;</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <Chart
-          tableElement={this.table}
-          data={data}
-          chart={this.state.chart}
-          onClose={() => this.setState({chart: null})}
-        />
+        <Chart tableElement={this.table}/>
       </Fragment>
     );
   }
 }
+
+export default connect((state) => state)(Table);

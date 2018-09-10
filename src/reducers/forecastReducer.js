@@ -1,7 +1,27 @@
 import {combineReducers} from 'redux';
 import axios from 'axios';
 
-import {FETCH_DATA, SELECT_MENU_ITEM, DELETE_ROW, ADD_ROW} from './../actions';
+import {ADD_ROW, CHART_CLOSE, CHART_OPEN, DELETE_ROW, FETCH_DATA, SELECT_MENU_ITEM} from './../actions';
+
+const selectedMenu = (state = 0, action) => {
+  switch (action.type) {
+    case SELECT_MENU_ITEM:
+      return action.index;
+    default:
+      return state;
+  }
+};
+
+const chartState = (state = null, action) => {
+  switch (action.type) {
+    case CHART_CLOSE:
+      return null;
+    case CHART_OPEN:
+      return action.index;
+    default:
+      return state;
+  }
+};
 
 const data = (state = [], action) => {
   switch (action.type) {
@@ -15,20 +35,15 @@ const data = (state = [], action) => {
       state.push(action.data);
       axios.post('/api/save/', {data: state});
       break;
-  }
-  return state;
-};
-
-const selectedMenu = (state = 0, action) => {
-  switch (action.type) {
-    case SELECT_MENU_ITEM:
-      return action.index;
     default:
-      return state;
+      return state || [];
   }
+
+  return state;
 };
 
 export const forecastReducer = combineReducers({
   data,
-  selectedMenu
+  selectedMenu,
+  chartState
 });

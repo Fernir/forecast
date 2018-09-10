@@ -44,11 +44,12 @@
   &-item {
     padding: 5px 10px;
     cursor: pointer;
-    transition: background-color .2s ease;
+    transition: opacity .2s ease;
     min-width: 50px;
+    opacity: .6;
 
     &:hover {
-      background: darken(#ffffff, 20%);
+      opacity: 1;
     }
   }
 }

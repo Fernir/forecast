@@ -1,10 +1,13 @@
 import React, {Fragment, PureComponent} from 'react';
+import {connect} from 'react-redux';
 import cn from 'classnames';
 import {Hamburger} from './../../components';
 
+import {selectMenuItem} from './../../actions';
+
 import './menu.scss';
 
-export class Menu extends PureComponent {
+class Menu extends PureComponent {
   state = {
     open: false
   };
@@ -17,13 +20,6 @@ export class Menu extends PureComponent {
     });
   }
 
-  onChange = (val) => {
-    this.closeMenu();
-    if (this.props.onChange) {
-      this.props.onChange(val);
-    }
-  };
-
   openMenu = () => this.setState({open: true});
   closeMenu = () => this.setState({open: false});
 
@@ -33,13 +29,15 @@ export class Menu extends PureComponent {
       this.closeMenu();
       return;
     }
-    this.onChange(index);
+
+    this.closeMenu();
+    this.props.dispatch(selectMenuItem(index));
   };
 
   isItemExists = (items, selected) => (items[selected] && items[selected].component);
 
   render() {
-    const {items, selected} = this.props;
+    const {items, selectedMenu: selected = 0} = this.props;
     const {open} = this.state;
 
     return (
@@ -77,3 +75,5 @@ export class Menu extends PureComponent {
     );
   }
 }
+
+export default connect((state) => state)(Menu);

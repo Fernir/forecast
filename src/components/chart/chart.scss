@@ -8,6 +8,17 @@
   align-items: center;
   justify-content: center;
   background: rgba(0,0,0,.3);
+  z-index: 3;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, visibility .2s ease;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+  }
 
   &-container {
     padding: 15px 20px 0 20px;

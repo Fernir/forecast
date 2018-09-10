@@ -55,5 +55,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: default;
+
+    &:nth-child(4) {
+      border-right: none;
+    }
+
+    &:nth-child(5) {
+      border-left: none;
+    }
   }
 }

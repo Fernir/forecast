@@ -1,13 +1,15 @@
 import React from 'react';
+import cn from 'classnames';
 
 import './hamburger.scss';
 
 export const Hamburger = ({open, size = 20, onClick, color = '#000000'}) => (
   <div className="hamburger" onClick={onClick}>
-    <svg viewBox={`0 0 ${size} ${size}`} strokeWidth={size / 10} stroke={color} strokeLinecap="round" width={size} height={size}>
-      <line x1={size / 10} y1={size / 10} x2={size - (size / 10)} y2={open ? size - (size / 10) : size / 10}/>
-      <line stroke={open ? 'rgba(0,0,0,0)' : '#000'} x1={size / 10} y1={size / 2} x2={size - size / 10} y2={size / 2}/>
-      <line x1={size / 10} y1={size - (size / 10)} x2={size - (size / 10)} y2={open ? size / 10 : size - (size / 10)}/>
+    <svg viewBox="0 0 100 100" fill={color} width={size} height={size}>
+      <path className={cn('line line-1', {'line-1--opened': open})} d="M5 13h90v14H5z"/>
+      <path className={cn('line line-2', {'line-2--opened': open})} d="M5 43h90v14H5z"/>
+      <path className={cn('line line-3', {'line-3--opened': open})} d="M5 73h90v14H5z"/>
     </svg>
   </div>
 );
+

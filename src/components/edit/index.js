@@ -1,4 +1,6 @@
 import React, {Fragment, PureComponent} from 'react';
+import {connect} from 'react-redux';
+import {addRow, selectMenuItem} from './../../actions';
 import {formatDate, titles} from '../../common';
 
 import './edit.scss';
@@ -9,11 +11,8 @@ export class Edit extends PureComponent {
   };
 
   save = () => {
-    if (this.props.onChange) {
-      this.props.onChange(
-        this.inputs.map((input) => input.value),
-      );
-    }
+    this.props.dispatch(addRow(this.inputs.map((input) => input.value)));
+    this.props.dispatch(selectMenuItem(0));
   };
 
   inputs = [];
@@ -57,3 +56,5 @@ export class Edit extends PureComponent {
     );
   }
 }
+
+export default connect((state) => state)(Edit);
