@@ -12,8 +12,8 @@ class Table extends PureComponent {
     showValue: null
   };
 
-  componentWillUnmount() {
-    window.addEventListener('resize', null);
+  componentWillMount() {
+    this.props.dispatch(fetchData());
   }
 
   componentDidMount() {
@@ -32,8 +32,8 @@ class Table extends PureComponent {
     }
   }
 
-  componentWillMount() {
-    this.props.dispatch(fetchData());
+  componentWillUnmount() {
+    window.addEventListener('resize', null);
   }
 
   render() {
