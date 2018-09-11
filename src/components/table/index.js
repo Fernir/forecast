@@ -12,6 +12,10 @@ class Table extends PureComponent {
     showValue: null
   };
 
+  componentWillUnmount() {
+    window.addEventListener('resize', null);
+  }
+
   componentDidMount() {
     window.addEventListener('resize', () => {
       if (window.innerWidth > 700) {
@@ -42,21 +46,22 @@ class Table extends PureComponent {
             Отобразить
           </label>
           <select id="select" className="select-checkbox" onChange={(e) => this.setState({showValue: e.target.value})}>
-            {titles.map((title, index) => (
-              <option value={index}>{title}</option>
-            ))}
+            {titles
+              .filter((t, tIndex) => tIndex > 0)
+              .map((title, index) => (
+                <option key={`select-${index}`} value={index + 1}>{title}</option>
+              ))}
           </select>
         </div>
         <table className="tbl" ref={(node) => { this.table = node; }}>
           <tbody>
             <tr>
               {titles
-                .filter((tr, trIndex) => !this.state.showValue || trIndex === 0 || trIndex == this.state.showValue)
-                .map((title, index, arr) => (
+                .filter((tr, trIndex) => !this.state.showValue || trIndex === 0 || trIndex === Number(this.state.showValue))
+                .map((title, index) => (
                   <th
                     key={title}
                     onClick={() => this.props.dispatch(chartOpen(index))}
-                    {...(index === arr.length - 1 && ({colSpan: 2}))}
                   >
                     {title}
                   </th>
@@ -64,17 +69,23 @@ class Table extends PureComponent {
             </tr>
             {data.map((tr, trIndex) => (
               <tr key={`tr-${trIndex + 1}`}>
-                {tr.filter((td, tdIndex) => !this.state.showValue || tdIndex === 0 || tdIndex == this.state.showValue).map((td, tdIndex) => (
-                  <td key={`${trIndex}-${tdIndex}-${td}`}>
-                    {td}
-                  </td>
-                ))}
-                <td style={{width: '1%', padding: 5}}>
-                  <button
-                    className="input-button input-button--small"
-                    onClick={() => this.props.dispatch(deleteRow(trIndex))}
-                  >&times;</button>
-                </td>
+                {tr
+                  .filter((td, tdIndex) => !this.state.showValue || tdIndex === 0 || tdIndex === Number(this.state.showValue))
+                  .map((td, tdIndex, arr) => (
+                    <td key={`${trIndex}-${tdIndex}-${td}`}>
+                      {tdIndex === arr.length - 1 ? (
+                        <div className="tbl-last">
+                          <div className="tbl-last-text">{td}</div>
+                          <div className="tbl-last-button">
+                            <button
+                              className="input-button input-button--small"
+                              onClick={() => this.props.dispatch(deleteRow(trIndex))}
+                            >&times;</button>
+                          </div>
+                        </div>
+                      ) : td}
+                    </td>
+                  ))}
               </tr>
             ))}
           </tbody>
