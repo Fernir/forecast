@@ -45,7 +45,8 @@ class Chart extends PureComponent {
             <Legend verticalAlign="top" height={36}/>
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5"/>
             <XAxis dataKey="Дата"/>
-            <YAxis/>
+            <YAxis
+              tickFormatter={(tickItem) => tickItem.toString().length > 3 ? `${tickItem.toString().substr(0, 3)}...` : tickItem}/>
             <Line type="linear" dot={false} dataKey={titles[chartState || 0]} stroke="#00aad8"/>
             <Tooltip/>
           </LineChart>

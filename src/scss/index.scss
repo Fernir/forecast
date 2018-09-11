@@ -7,3 +7,16 @@ body {
 *, *:before, *:after {
   box-sizing: border-box;
 }
+
+* {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: darken(#aaa, 30%);
+    margin: 0 10px 0 0;
+  }
+  &::-webkit-scrollbar-track {
+    background: lighten(#aaa, 30%);
+  }
+}

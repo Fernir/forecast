@@ -5,10 +5,6 @@
   font-size: 12px;
   text-align: center;
 
-  @include mobile {
-    table-layout: fixed;
-  }
-
   &-nopad {
     padding: 0 !important;
   }
@@ -56,12 +52,51 @@
     text-overflow: ellipsis;
     cursor: default;
 
-    &:nth-child(4) {
+    &:nth-last-child(2) {
       border-right: none;
     }
 
-    &:nth-child(5) {
+    &:last-child {
       border-left: none;
+      width: 1%;
+    }
+  }
+}
+
+.select {
+  display: none;
+  font-size: 14px;
+  align-items: center;
+
+  @include mobile {
+    display: flex;
+  }
+
+  & label {
+    text-align: center;
+    font-weight: bold;
+    flex: 1 1 auto;
+  }
+
+  & select {
+    flex: 1 1 auto;
+  }
+
+  &-checkbox {
+    padding: 5px;
+    margin: 5px;
+
+    & option {
+      &::before {
+        content: "\2610";
+        width: 1.3em;
+        text-align: center;
+        display: inline-block;
+      }
+
+      &:checked::before {
+        content: "\2611";
+      }
     }
   }
 }

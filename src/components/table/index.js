@@ -8,6 +8,26 @@ import {chartOpen, deleteRow, fetchData} from './../../actions';
 import './table.scss';
 
 class Table extends PureComponent {
+  state = {
+    showValue: null
+  };
+
+  componentDidMount() {
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 700) {
+        this.setState({showValue: null});
+      } else if (!this.state.showValue) {
+        this.setState({showValue: 1});
+      }
+    });
+
+    if (window.innerWidth > 700) {
+      this.setState({showValue: null});
+    } else if (!this.state.showValue) {
+      this.setState({showValue: 1});
+    }
+  }
+
   componentWillMount() {
     this.props.dispatch(fetchData());
   }
@@ -17,22 +37,34 @@ class Table extends PureComponent {
 
     return (
       <Fragment>
+        <div className="select">
+          <label htmlFor="select">
+            Отобразить
+          </label>
+          <select id="select" className="select-checkbox" onChange={(e) => this.setState({showValue: e.target.value})}>
+            {titles.map((title, index) => (
+              <option value={index}>{title}</option>
+            ))}
+          </select>
+        </div>
         <table className="tbl" ref={(node) => { this.table = node; }}>
           <tbody>
             <tr>
-              {titles.map((title, index) => (
-                <th
-                  key={title}
-                  onClick={() => this.props.dispatch(chartOpen(index))}
-                  {...(index === titles.length - 1 && ({colSpan: 2}))}
-                >
-                  {title}
-                </th>
-              ))}
+              {titles
+                .filter((tr, trIndex) => !this.state.showValue || trIndex === 0 || trIndex == this.state.showValue)
+                .map((title, index, arr) => (
+                  <th
+                    key={title}
+                    onClick={() => this.props.dispatch(chartOpen(index))}
+                    {...(index === arr.length - 1 && ({colSpan: 2}))}
+                  >
+                    {title}
+                  </th>
+                ))}
             </tr>
             {data.map((tr, trIndex) => (
               <tr key={`tr-${trIndex + 1}`}>
-                {tr.map((td, tdIndex) => (
+                {tr.filter((td, tdIndex) => !this.state.showValue || tdIndex === 0 || tdIndex == this.state.showValue).map((td, tdIndex) => (
                   <td key={`${trIndex}-${tdIndex}-${td}`}>
                     {td}
                   </td>
