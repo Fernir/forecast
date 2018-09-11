@@ -3,51 +3,46 @@ import {connect} from 'react-redux';
 import cn from 'classnames';
 import {Hamburger} from './../../components';
 
-import {selectMenuItem} from './../../actions';
+import {menuClose, menuOpen, selectMenuItem} from './../../actions';
 
 import './menu.scss';
 
 class Menu extends PureComponent {
-  state = {
-    open: false
+  handleMenuClick = (items, index) => {
+    if (items[index].onClick) {
+      this.props.dispatch(items[index].onClick);
+      this.props.dispatch(menuClose());
+      return;
+    }
+
+    this.props.dispatch(menuClose());
+    this.props.dispatch(selectMenuItem(index));
   };
 
   componentDidMount() {
     document.addEventListener('keydown', (e) => {
       if (e.keyCode === 27) {
-        this.closeMenu();
+        this.props.dispatch(menuClose());
       }
     });
   }
 
-  openMenu = () => this.setState({open: true});
-  closeMenu = () => this.setState({open: false});
-
-  handleMenuClick = (items, index) => {
-    if (items[index].onClick) {
-      items[index].onClick();
-      this.closeMenu();
-      return;
-    }
-
-    this.closeMenu();
-    this.props.dispatch(selectMenuItem(index));
-  };
-
   isItemExists = (items, selected) => (items[selected] && items[selected].component);
 
   render() {
-    const {items, selectedMenu: selected = 0} = this.props;
-    const {open} = this.state;
+    const {items, selectedMenu: selected = 0, menuIsOpen} = this.props;
 
     return (
       <Fragment>
-        <div className={cn('menu-back', {'menu-back--open': open})} onClick={this.closeMenu}/>
-        <Hamburger
-          onClick={open ? this.closeMenu : this.openMenu}
-          open={open}
+        <div
+          className={cn('menu-back', {'menu-back--open': menuIsOpen})}
+          onClick={() => this.props.dispatch(menuClose())}
         />
-        <div className={cn('menu', {'menu--open': open})}>
+        <Hamburger
+          onClick={() => this.props.dispatch(menuIsOpen ? menuClose() : menuOpen())}
+          open={menuIsOpen}
+        />
+        <div className={cn('menu', {'menu--open': menuIsOpen})}>
           {items.map((item, index) => (
             <div
               className="menu-item"
@@ -76,4 +71,4 @@ class Menu extends PureComponent {
   }
 }
 
-export default connect((state) => state)(Menu);
+export default connect(({menuIsOpen, selectedMenu}) => ({menuIsOpen, selectedMenu}))(Menu);

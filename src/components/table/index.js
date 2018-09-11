@@ -38,8 +38,10 @@ class Table extends PureComponent {
                   </td>
                 ))}
                 <td style={{width: '1%', padding: 5}}>
-                  <button className="input-button input-button--small"
-                          onClick={() => this.props.dispatch(deleteRow(trIndex))}>&times;</button>
+                  <button
+                    className="input-button input-button--small"
+                    onClick={() => this.props.dispatch(deleteRow(trIndex))}
+                  >&times;</button>
                 </td>
               </tr>
             ))}
@@ -51,4 +53,4 @@ class Table extends PureComponent {
   }
 }
 
-export default connect((state) => state)(Table);
+export default connect(({data}) => ({data}))(Table);

@@ -59,15 +59,15 @@ const renderPage = (req, res) => {
 };
 
 app
-  .use(compression())
   .use(WebpackDevMiddleware(compiler, devServerOptions))
   .use(WebpackHotMiddleware(compiler))
   .use(bodyParser.json())
   .use(bodyParser.raw())
   .use(bodyParser.urlencoded())
   .use(cors({credentials: true, origin: true}))
-  .use(netjet())
-  .use(express.static(path.join(__dirname, 'public'), {maxAge: '120d'}));
+  .use(express.static(path.join(__dirname, 'public'), {maxAge: '120d'}))
+  .use(compression())
+  .use(netjet());
 
 
 app.post('/api/import/', (req, res) => {

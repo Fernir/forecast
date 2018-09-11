@@ -5,7 +5,7 @@ export const titles = ['Дата', 'Выручка', 'серебро, руб.', 
 
 export const formatDate = (date) => `${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}.${(date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}.${(date.getFullYear() % 100) < 10 ? `0${date.getFullYear() % 100}` : date.getFullYear() % 100}`;
 
-export const importFile = () => (dispatch) => {
+export const importFile = (dispatch) => {
   const inputFile = document.createElement('input');
 
   Object.assign(inputFile, {

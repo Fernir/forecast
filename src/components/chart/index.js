@@ -55,4 +55,4 @@ class Chart extends PureComponent {
   }
 }
 
-export default connect((state) => state)(Chart);
+export default connect(({data, chartState}) => ({data, chartState}))(Chart);

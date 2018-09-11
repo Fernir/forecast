@@ -57,4 +57,4 @@ export class Edit extends PureComponent {
   }
 }
 
-export default connect((state) => state)(Edit);
+export default connect()(Edit);

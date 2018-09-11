@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
 
 import {importFile} from './../common';
 import {Edit, Menu, Table} from './../components';
@@ -7,7 +6,7 @@ import {EditIcon, ExportIcon, ImportIcon, TableIcon} from './../icons';
 
 import './../scss/index.scss';
 
-const App = ({dispatch}) => (
+const App = () => (
   <Menu
     items={[
       {
@@ -29,7 +28,7 @@ const App = ({dispatch}) => (
           label: 'Импорт',
           icon: <ImportIcon/>
         },
-        onClick: () => dispatch(importFile())
+        onClick: () => importFile()
       },
       {
         title: {
@@ -42,4 +41,4 @@ const App = ({dispatch}) => (
   />
 );
 
-export default connect((state) => state)(App);
+export default App;
