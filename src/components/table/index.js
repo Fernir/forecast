@@ -32,8 +32,8 @@ class Table extends PureComponent {
             </tr>
             {data.map((tr, trIndex) => (
               <tr key={`tr-${trIndex + 1}`}>
-                {tr.map((td) => (
-                  <td key={td}>
+                {tr.map((td, tdIndex) => (
+                  <td key={`${trIndex}-${tdIndex}-${td}`}>
                     {td}
                   </td>
                 ))}
